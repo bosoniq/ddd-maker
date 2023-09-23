@@ -1,0 +1,18 @@
+{
+    "require": {
+        "symfony/console": "^6.3",
+        "symfony/filesystem": "^6.3",
+        "beberlei/assert": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "bin": [
+        "bin/dddmake"
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^6.3"
+    }
+}

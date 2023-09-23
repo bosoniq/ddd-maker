@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Application\Command<CONTAINER>;
+
+use <NAMESPACE>\Shared\Application\Command\Command;
+
+class <NAME>Command implements Command
+{
+    public function __construct()
+    {
+
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "project_namespace": "NamespaceRoot",
+    "templates": {
+        "Command": {
+            "template": "template/Command",
+            "additional": ["CommandHandler"]
+        },
+        "CommandHandler": {
+            "template": "template/CommandHandler",
+            "additional": []
+        },
+        "Event": {
+            "template": "template/Event",
+            "additional": ["EventHandler"]
+        },
+        "EventHandler": {
+            "template": "template/EventHandler",
+            "additional": []
+        },
+        "Query": {
+            "template": "template/Query",
+            "additional": ["QueryHandler"]
+        },
+        "QueryHandler": {
+            "template": "template/QueryHandler",
+            "additional": []
+        },
+        "Page": {
+            "template": "template/Page",
+            "additional": ["Command", "CommandHandler"]
+        },
+        "Finder": {
+            "template": "template/Finder",
+            "additional": ["Repository"]
+        },
+        "Repository": {
+            "template": "template/Repository",
+            "additional": []
+        }
+    }
+}
