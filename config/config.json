@@ -1,5 +1,5 @@
 {
-    "project_namespace": "NamespaceRoot",
+    "project_namespace": "DefaultNamespaceRoot",
     "templates": {
         "Command": {
             "template": "template/Command",

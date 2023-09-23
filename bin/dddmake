@@ -4,10 +4,26 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use App\Command\DddMakerCommand;
+use App\Service\ClassBuilder;
+use App\Service\FileReader;
+use App\Service\FileWriter;
+use App\Service\Validator;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-$application->add(new DddMakerCommand());
+$fileReader = new FileReader();
+$fileWriter = new FileWriter();
+$classBuilder = new ClassBuilder($fileReader);
+$validator = new Validator();
+
+$maker = new DddMakerCommand(
+    $fileReader,
+    $fileWriter,
+    $classBuilder,
+    $validator,
+);
+
+$application->add($maker);
 $application->setVersion('0.0.1');
 $application->run();

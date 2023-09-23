@@ -23,7 +23,7 @@ class ToGenerate
     private function __construct(
         private readonly string $name,
         private readonly string $content,
-        private readonly string $namespace,
+        private readonly ?string $namespace,
         private readonly string $path,
     ) {
     }
@@ -32,11 +32,25 @@ class ToGenerate
     {
         $type = ucfirst($type);
 
-        return new self(
-            self::buildClassName($request, $type),
-            self::buildClassContent($request, $template),
+        $className = self::buildClassName($request, $type);
+
+        $classContainer = self::buildContainer($request->parentDirectory());
+
+        $classContent = self::buildClassContent(
+            $request->prepend(),
+            $request->context(),
             $request->namespace(),
-            self::buildPath($request, $type),
+            $classContainer,
+            $template
+        );
+
+        $classPath = self::buildPath($request, $type);
+
+        return new self(
+            $className,
+            $classContent,
+            $request->namespace(),
+            $classPath,
         );
     }
 
@@ -55,17 +69,27 @@ class ToGenerate
         return $this->content;
     }
 
+    public function namespace(): ?string
+    {
+        return $this->namespace;
+    }
+
     private static function buildClassName(Request $request, string $type): string
     {
         return ucfirst($request->prepend().$type.'.'.self::EXTENSION);
     }
 
-    private static function buildClassContent(Request $request, string $template): string
-    {
-        $template = str_replace('<NAME>', ucfirst($request->prepend()), $template);
-        $template = str_replace('<CONTEXT>', ucfirst($request->context()), $template);
-        $template = str_replace('<NAMESPACE>', ucfirst($request->namespace()), $template);
-        $template = str_replace('<CONTAINER>', ucfirst($request->parentDirectory()), $template);
+    private static function buildClassContent(
+        string $name,
+        string $context,
+        string $namespace,
+        string $container,
+        string $template
+    ): string {
+        $template = str_replace('<NAME>', ucfirst($name), $template);
+        $template = str_replace('<CONTEXT>', ucfirst($context), $template);
+        $template = str_replace('<NAMESPACE>', ucfirst($namespace), $template);
+        $template = str_replace('<CONTAINER>', ucfirst($container), $template);
 
         return $template;
     }
@@ -77,7 +101,7 @@ class ToGenerate
         $parentDirectory = $request->parentDirectory();
 
         if ('Page' === $type) {
-            $parentDirectory = 'Delivery/Rest'.$parentDirectory;
+            $parentDirectory = 'Delivery/Rest/'.$parentDirectory;
         }
 
         if ('' === $parentDirectory) {
@@ -102,5 +126,14 @@ class ToGenerate
     private static function modifyTypeForDirectory(string $type): string
     {
         return str_replace('Handler', '', $type);
+    }
+
+    private static function buildContainer(string $parentDirectory): string
+    {
+        if ('' === $parentDirectory) {
+            return $parentDirectory;
+        }
+
+        return '\\'.str_replace('/', '\\', $parentDirectory);
     }
 }

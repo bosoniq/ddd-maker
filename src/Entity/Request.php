@@ -19,17 +19,27 @@ class Request
     ) {
     }
 
+    /**
+     * @param array{
+     *   project_namespace: string|null,
+     *   templates: array<string, array{template: string, additional: array<string>}>
+     * } $config
+     * @throws AssertionFailedException
+     */
     public static function fromInput(InputInterface $input, array $config): self
     {
-        self::assertValidInput($input);
+        $args = $input->getArguments();
+        $options = $input->getOptions();
+
+        self::assertValidArguments($args);
         self::assertValidConfig($config);
 
         return new self(
-            $input->getArgument('type'),
-            self::normalizeContext($input->getArgument('context')),
-            $input->getArgument('prepend'),
+            $args['type'],
+            self::normalizeContext($args['context']),
+            $args['prepend'],
             $config['project_namespace'],
-            $input->getOption('directory'),
+            self::normalizeDirectory($options['directory']),
         );
     }
 
@@ -59,17 +69,24 @@ class Request
         return $this->parentDirectory ?? '';
     }
 
-    /** @throws AssertionFailedException */
-    private static function assertValidInput(InputInterface $input): void
+    /**
+     * @param array<array<array|bool|float|int|string|null> $arguments
+     * @throws AssertionFailedException
+     */
+    private static function assertValidArguments(array $arguments): void
     {
-        $arguments = $input->getArguments();
-
-        Assertion::notBlank($arguments['type'] ?? null);
-        Assertion::notBlank($arguments['context'] ?? null);
-        Assertion::notBlank($arguments['prepend'] ?? null);
+        Assertion::alnum($arguments['type'] ?? null);
+        Assertion::alnum($arguments['context'] ?? null);
+        Assertion::alnum($arguments['prepend'] ?? null);
     }
 
-    /** @throws AssertionFailedException */
+    /**
+     * @param array{
+     *   project_namespace: string|null,
+     *   templates: array<string, array{template: string, additional: array<string>}>
+     * } $config
+     * @throws AssertionFailedException
+     */
     private static function assertValidConfig(array $config): void
     {
         Assertion::notBlank($config['project_namespace'] ?? null);
@@ -81,5 +98,20 @@ class Request
         $context = str_replace('context', '', $context);
 
         return $context . 'Context';
+    }
+
+    private static function normalizeDirectory(?string $directories): ?string
+    {
+        if (null === $directories) {
+            return $directories;
+        }
+
+        $directories = explode('/', $directories);
+
+        foreach ($directories as &$directory) {
+            $directory = ucfirst($directory);
+        }
+
+        return implode('/', $directories);
     }
 }

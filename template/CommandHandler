@@ -10,16 +10,9 @@ use <NAMESPACE>\<CONTEXT>\Application\Command<CONTAINER>\<NAME>Command;
 
 final class <NAME>CommandHandler implements CommandHandler
 {
-    public function __construct()
-    {
-    }
-
     /** @throws AssertionFailedException */
-    public function __invoke(ResendUserInviteCommand $command): void
+    public function __invoke(<NAME>Command $command): void
     {
-        echo 'handler';
-        exit;
-
-        /* $this->eventBus->publish(...$userAccess->events()); */
+        echo 'handler'; exit;
     }
 }
