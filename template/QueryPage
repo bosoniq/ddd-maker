@@ -18,7 +18,7 @@ final class <NAME>Page extends ApiQueryPage
     public function __invoke(Request $request): JsonResponse
     {
         return new JsonResponse(
-            [],
+            $this->ask(new <NAME>Query()),
             Response::HTTP_OK,
         );
     }
