@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Infrastructure\Domain\Repository;
+
+use <NAMESPACE>\Shared\Infrastructure\Domain\Repository\DoctrineRepository;
+use <NAMESPACE>\<CONTEXT>\Domain\Aggregate\<AGGREGATE>;
+use <NAMESPACE>\<CONTEXT>\Domain\Repository\<NAME>Repository;
+
+final class Doctrine<NAME>Repository extends DoctrineRepository implements <NAME>Repository
+{
+    protected function entityClass(): string
+    {
+        return <AGGREGATE>::class; // TODO: Add entity class here
+    }
+}

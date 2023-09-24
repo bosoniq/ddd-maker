@@ -36,6 +36,18 @@
         "QueryResponse": {
             "template": "template/QueryResponse",
             "additional": []
+        },
+        "Finder": {
+            "template": "template/Finder",
+            "additional": ["Repository", "DoctrineRepository"]
+        },
+        "Repository": {
+            "template": "template/Repository",
+            "additional": []
+        },
+        "DoctrineRepository": {
+            "template": "template/DoctrineRepository",
+            "additional": []
         }
     }
 }

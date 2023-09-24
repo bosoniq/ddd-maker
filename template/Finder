@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Domain\Service\User;
+
+use <NAMESPACE>\<CONTEXT>\Domain\Aggregate\<AGGREGATE>;
+
+final class <NAME>
+{
+    public function __construct(private readonly <AGGREGATE>Repository $<AGGREGATE>Repository)
+    {
+    }
+}
