@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Application\Query<CONTAINER>;
+
+use <NAMESPACE>\Shared\Application\Query\Query;
+
+final class <NAME>Query implements Query
+{
+    public function __construct()
+    {
+    }
+}

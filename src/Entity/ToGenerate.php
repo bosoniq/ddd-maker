@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use PDO;
+
 class ToGenerate
 {
     private const EXTENSION = 'php';
 
     private const TYPE_MAPPINGS = [
+        'CommandPage' => 'Infrastructure',
         'Command' => 'Application',
         'CommandHandler' => 'Application',
-        'Event' => 'Application',
+        'Event' => 'Domain',
         'EventHandler' =>'Application',
+        'QueryPage' => 'Infrastructure',
         'Query' => 'Application',
         'QueryHandler' =>'Application',
-        'Page' => 'Infrastructure',
+        'QueryResponse' =>'Application',
         'Finder' => 'Domain',
         'Repository' => 'Domain',
+        'DoctrineRepository' => 'Domain',
     ];
 
     private function __construct(
@@ -76,6 +81,10 @@ class ToGenerate
 
     private static function buildClassName(Request $request, string $type): string
     {
+        if (false !== strpos($type, 'Page')) {
+            $type = 'Page';
+        }
+
         return ucfirst($request->prepend().$type.'.'.self::EXTENSION);
     }
 
@@ -97,10 +106,10 @@ class ToGenerate
     private static function buildPath(Request $request, string $type): string
     {
         $className = self::buildClassName($request, $type);
-        $type = self::modifyTypeForDirectory($type);
+        $dirType = self::modifyTypeForDirectory($type);
         $parentDirectory = $request->parentDirectory();
 
-        if ('Page' === $type) {
+        if (false !== strpos($type, 'Page')) {
             $parentDirectory = 'Delivery/Rest/'.$parentDirectory;
         }
 
@@ -112,7 +121,7 @@ class ToGenerate
             'src',
             $request->context(),
             self::TYPE_MAPPINGS[$type],
-            'Page' === $type ? null : $type,
+            self::preparePathType($dirType),
             $parentDirectory,
             $className,
         ];
@@ -125,6 +134,7 @@ class ToGenerate
 
     private static function modifyTypeForDirectory(string $type): string
     {
+        $type = str_replace('Response', '', $type);
         return str_replace('Handler', '', $type);
     }
 
@@ -135,5 +145,14 @@ class ToGenerate
         }
 
         return '\\'.str_replace('/', '\\', $parentDirectory);
+    }
+
+    private static function preparePathType(string $type): ?string
+    {
+        if (false !== strpos($type, 'Page')) {
+            return null;
+        }
+
+        return $type;
     }
 }

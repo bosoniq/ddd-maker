@@ -1,6 +1,10 @@
 {
     "project_namespace": "DefaultNamespaceRoot",
     "templates": {
+        "CommandPage": {
+            "template": "template/CommandPage",
+            "additional": ["Command", "CommandHandler"]
+        },
         "Command": {
             "template": "template/Command",
             "additional": ["CommandHandler"]
@@ -17,24 +21,20 @@
             "template": "template/EventHandler",
             "additional": []
         },
+        "QueryPage": {
+            "template": "template/QueryPage",
+            "additional": ["Query", "QueryHandler", "QueryResponse"]
+        },
         "Query": {
             "template": "template/Query",
-            "additional": ["QueryHandler"]
+            "additional": ["QueryHandler", "QueryResponse"]
         },
         "QueryHandler": {
             "template": "template/QueryHandler",
             "additional": []
         },
-        "Page": {
-            "template": "template/Page",
-            "additional": ["Command", "CommandHandler"]
-        },
-        "Finder": {
-            "template": "template/Finder",
-            "additional": ["Repository"]
-        },
-        "Repository": {
-            "template": "template/Repository",
+        "QueryResponse": {
+            "template": "template/QueryResponse",
             "additional": []
         }
     }

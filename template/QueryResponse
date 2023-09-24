@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Application\Query<CONTAINER>;
+
+use <NAMESPACE>\Shared\Application\Query\QueryResponse;
+
+final class <NAME>Response implements QueryResponse
+{
+    private function __construct()
+    {
+    }
+
+    public static function write(): self
+    {
+        return new self();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [];
+    }
+}

@@ -1,0 +1,72 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Domain\Event<CONTAINER>;
+use Assert\Assert;
+use Assert\AssertionFailedException;
+use <NAMESPACE>\Shared\Domain\Aggregate\DomainEvent;
+
+use function strval;
+
+final class <NAME> extends DomainEvent
+{
+    private function __construct(
+        string $aggregateId,
+        private readonly ?string $field,
+        ?string $messageId = null,
+        ?int $messageVersion = null,
+        ?string $occurredOn = null,
+    ) {
+        parent::__construct($aggregateId, $messageId, $messageVersion, $occurredOn);
+    }
+
+    /** @throws AssertionFailedException */
+    public static function fromAggregate(\stdClass $aggregate): self
+    {
+        // TODO: Update with correct aggregate here
+        return new self(
+            $aggregate->field()->id(),
+        );
+    }
+
+    /** @throws AssertionFailedException */
+    public static function fromPrimitives(
+        string $aggregateId,
+        array $payload,
+        string $messageId,
+        int $messageVersion,
+        string $occurredOn,
+    ): DomainEvent {
+        self::ensurePayloadIsValid($payload);
+
+        return new self(
+            $aggregateId,
+            strval($payload['field'] ?? null),
+            $messageId,
+            $messageVersion,
+            $occurredOn,
+        );
+    }
+
+    /** @phpstan-return PayloadType */
+    public function toPrimitives(): array
+    {
+        return [
+            'field' => $this->field(),
+        ];
+    }
+
+    public function aggregateName(): string
+    {
+        return \stdClass::class; // TODO: Add the underlying aggregate here
+    }
+
+    /** @param array<string, mixed> $payload */
+    private static function ensurePayloadIsValid(array $payload): void
+    {
+        Assert::lazy()
+            ->that($payload)->keyExists('field')
+            ->verifyNow();
+    }
+}

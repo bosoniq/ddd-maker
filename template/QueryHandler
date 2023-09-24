@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace <NAMESPACE>\<CONTEXT>\Application\Query<CONTAINER>;
+
+use <NAMESPACE>\Shared\Application\Query\QueryHandler;
+
+final class <NAME>QueryHandler implements QueryHandler
+{
+    public function __construct()
+    {
+    }
+
+    public function __invoke(<NAME>Query $query): <NAME>Response
+    {
+        return <NAME>Response::write();
+    }
+}
