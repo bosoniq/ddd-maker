@@ -7,6 +7,7 @@ namespace App\Service;
 use Exception;
 use App\Entity\Request;
 use App\Entity\ToGenerate;
+use App\Exception\MissingTemplateException;
 use App\Service\FileReader;
 
 class ClassBuilder
@@ -43,11 +44,12 @@ class ClassBuilder
      *   project_namespace: string,
      *   templates: array<string, array{template: string, additional: array<string>}>
      * } $config
+     * @throws MissingTemplateException
      */
     private function ensureConfigKeyExists(array $config, string $type): void
     {
         if (!array_key_exists($type, $config['templates'])) {
-            throw new Exception('Requested type does not exist!');
+            throw MissingTemplateException::fromType($type);
         }
     }
 

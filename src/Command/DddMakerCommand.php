@@ -57,11 +57,11 @@ class DddMakerCommand extends Command
 
             $newClasses = $this->classBuilder->prepareNewClassObjects($request, $config);
 
-            $this->fileWriter->writeFiles($newClasses);
+            $this->fileWriter->writeFiles($output, $newClasses);
 
             return Command::SUCCESS;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $output->writeln($e->getMessage());
             return Command::FAILURE;
         }
     }

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Exception\FileCannotBeReadException;
+use App\Exception\FileNotFoundException;
+use App\Exception\MissingTemplateException;
+use App\Exception\MissingWorkingDirectoryException;
 use Exception;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 class FileReader
 {
@@ -30,7 +33,9 @@ class FileReader
      *   templates: array<string, array{template: string, additional: array<string>}>
      * }
      *
-     * @throws Exception */
+     * @throws FileCannotBeReadException
+     * @throws MissingWorkingDirectoryException
+     */
     public function loadConfig(): array
     {
         // load defaults
@@ -48,29 +53,32 @@ class FileReader
         }
     }
 
-    /** @throws Exception */
+    /** @throws MissingWorkingDirectoryException */
     private function getCwd(): string
     {
         $cwd = getcwd();
 
         if (is_bool($cwd)) {
-            throw new Exception('Current working directory not found');
+            throw MissingWorkingDirectoryException::create();
         }
 
         return $cwd . '/';
     }
 
-    /** @throws FileNotFoundException */
+    /**
+     * @throws FileNotFoundException
+     * @throws FileCannotBeReadException
+     */
     private function readFile(string $path): string
     {
         if (!file_exists($path)) {
-            throw new FileNotFoundException();
+            throw FileNotFoundException::fromPath($path);
         }
 
         $content = file_get_contents($path);
 
         if (is_bool($content)) {
-            throw new FileNotFoundException(); // TODO: FileCannotBeReadException
+            throw FileCannotBeReadException::fromPath($path);
         }
 
         return $content;
